@@ -1,5 +1,9 @@
 # Dom.ru customer check
 
+<img src="https://user-images.githubusercontent.com/31013580/148692070-7ba0f25b-bf82-4448-9967-f24bad7f8538.png" width="500">
+
+Dom.ru is one of the largest Russian ISP owned by [ERTelecom](https://en.wikipedia.org/wiki/ERTelecom). This script allows you to check for an account by phone number and get information about the account (parts of physical addresses, emails, etc.). 
+
 ## Usage
 
 **Only phones as targets are supported for now!**
@@ -99,6 +103,9 @@ $ cat list.txt | domru_customer_check --targets-from-stdin
 <summary>Reports</summary>
 
 The skeleton implements CSV reports:
+
+![telegram-cloud-photo-size-2-5393582422823647056-y](https://user-images.githubusercontent.com/31013580/148692023-d1146588-4b42-431f-81f1-4d02517d2597.jpg)
+  
 ```sh
 $ domru_customer_check 79194108310 79876543210 -oC results.csv
 ...
