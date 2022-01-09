@@ -1,8 +1,8 @@
-PROJECT_NAME=osint_cli_tool_skeleton
-LINT_FILES=osint_cli_tool_skeleton tests
+PROJECT_NAME=domru_customer_check
+LINT_FILES=domru_customer_check tests
 
 test:
-	coverage run --source=./osint_cli_tool_skeleton -m pytest tests
+	coverage run --source=./domru_customer_check -m pytest tests
 	coverage report -m
 	coverage html
 

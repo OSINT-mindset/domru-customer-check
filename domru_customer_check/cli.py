@@ -176,6 +176,7 @@ async def main():
     logger.setLevel(log_level)
 
     input_data = []
+    targets = []
 
     # read from file
     if args.target_list_filename:
@@ -183,27 +184,34 @@ async def main():
             print(f'There is no file {args.target_list_filename}')
         else:
             with open(args.target_list_filename) as f:
-                input_data = [InputData(t) for t in f.read().splitlines()]
+                targets = f.read().splitlines()
 
     # or read from stdin
     # e.g. cat list.txt | ./run.py --targets-from-stdin
     elif args.target_list_stdin:
         for line in sys.stdin:
-            input_data.append(InputData(line.strip()))
+            targets.append(line.strip())
 
     # or read from arguments
     elif args.target:
-        input_data = [InputData(t) for t in args.target]
-
-    if not input_data:
-        print('There are no targets to check!')
-        sys.exit(1)
+        targets = args.target
 
     # convert input to output
     processor = Processor(
         no_progressbar=args.no_progressbar,
         proxy=args.proxy,
     )
+
+    domains = await processor.get_domains()
+    print(f'Collected {len(domains)} domains')
+
+    for t in targets:
+        for d in domains:
+            input_data.append(InputData(t, d))
+
+    if not input_data:
+        print('There are no targets to check!')
+        sys.exit(1)
 
     output_data = await processor.process(input_data)
 

@@ -1,42 +1,18 @@
-# OSINT cli tool skeleton
-
-<p align="center">
-  <p align="center">
-    <a href="https://pypi.org/project/osint-cli-tool-skeleton/">
-      <img alt="PyPI" src="https://img.shields.io/pypi/v/osint-cli-tool-skeleton?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/osint-cli-tool-skeleton/">
-      <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dw/osint-cli-tool-skeleton?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/osint-cli-tool-skeleton/">
-      <img alt="Views" src="https://komarev.com/ghpvc/?username=osint-cli-tool-skeleton&color=brightgreen&label=views&style=flat-square">
-    </a>
-  </p>
-  <p align="center">
-    <img src="https://raw.githubusercontent.com/soxoj/osint-cli-tool-skeleton/main/pictures/logo.png" height="200"/>
-  </p>
-</p>
-
-Template for new OSINT command-line tools.
-
-**Press button "[Use this template](https://github.com/soxoj/osint-cli-tool-skeleton/generate)" to generate your own tool repository.** See [INSTALL.md](INSTALL.md) for further setup.
-
-## Features
-
-- Detailed readme
-- Process N targets from args, text files, stdin
-- Make TXT, CSV reports
-- Proxy support
-- Ready to publish Python package
+# Dom.ru customer check
 
 ## Usage
 
+**Only phones as targets are supported for now!**
+
 ```sh
-$ python3 -m osint-cli-tool-skeleton <target>
+# without installing
+$ ./run.py <target>
 
+# as a package
+
+$ python3 -m domru-customer-check <target>
 # or simply
-
-$ osint_cli_tool_skeleton <target>
+$ domru_customer_check <target>
 ```
 
 <details>
@@ -44,37 +20,78 @@ $ osint_cli_tool_skeleton <target>
 
 Specify targets one or more times:
 ```sh
-$ osint_cli_tool_skeleton www.google.com reddit.com patreon.com
+$ domru_customer_check 79194108310 79876543210
 
-Target: www.google.com
+Collected 57 domains
+100%|████████████████████████████████| 114/114 [00:08<00:00, 12.69it/s]
+Target: 79194108310 (sbor)
 Results found: 1
-1) Value: Google
-Code: 200
+1) Contact Id: 9644224
+Contact Type: 2
+Agreement Id: 10557305
+Row: ********6538
+Address: Санкт-Петербург, Ш*************************, ******, 29, п.1
 
 ------------------------------
-Target: patreon.com
+Target: 79194108310 (interzet)
 Results found: 1
-1) Value: Best way for artists and creators to get sustainable income and connect with fans | Patreon
-Code: 200
+1) Contact Id: 9644224
+Contact Type: 2
+Agreement Id: 10557305
+Row: ********6538
+Address: Санкт-Петербург, Ш******************************, ******, 29, п.1
 
 ------------------------------
-Target: reddit.com
+Target: 79876543210 (dzr)
 Results found: 1
-1) Value: Reddit - Dive into anything
-Code: 200
+1) Contact Id: 4453093
+Contact Type: 2
+Agreement Id: 3291977
+Row: ********0493
+Address: Нижний Новгород, П**************************, **, 5, п.1
 
 ------------------------------
-Total found: 3
+Target: 79876543210 (nn)
+Results found: 1
+1) Contact Id: 4453093
+Contact Type: 2
+Agreement Id: 3291977
+Row: ********0493
+Address: Нижний Новгород, П****************************, **, 5, п.1
+
+------------------------------
+Target: 79876543210 (tmn)
+Results found: 3
+1) Contact Id: 9847820
+Contact Type: 2
+Agreement Id: 2106611
+Row: ********6127
+Address: Тюмень, К**************************, **, 24, п.1
+
+2) Contact Id: 9858960
+Contact Type: 2
+Agreement Id: 2112488
+Row: ********0138
+Address: Исетское  С, И*****************, ***********, 6, 1, п.1
+
+3) Contact Id: 9882656
+Contact Type: 2
+Agreement Id: 2158682
+Row: ********5413
+Address: Тюмень, П*****************, *****, 61, п.1
+
+------------------------------
+Total found: 7
 ```
 
 Or use a file with targets list:
 ```sh
-$ osint_cli_tool_skeleton --target-list targets.txt
+$ domru_customer_check --target-list targets.txt
 ```
 
 Or combine tool with other through input/output pipelining:
 ```sh
-$ cat list.txt | osint_cli_tool_skeleton --targets-from-stdin
+$ cat list.txt | domru_customer_check --targets-from-stdin
 ```
 </details>
 
@@ -83,26 +100,29 @@ $ cat list.txt | osint_cli_tool_skeleton --targets-from-stdin
 
 The skeleton implements CSV reports:
 ```sh
-$ osint_cli_tool_skeleton www.google.com reddit.com patreon.com -oC results.csv
+$ domru_customer_check 79194108310 79876543210 -oC results.csv
 ...
 Results were saved to file results.csv
 
-$ more results.csv
-"Target","Value","Code"
-"www.google.com","Google","200"
-"patreon.com","Best way for artists and creators to get sustainable income and connect with fans | Patreon","200"
-"reddit.com","Reddit - Dive into anything","200"
+$ head -n 4 results.csv
+"Target","Row","Address","Contact Id","Contact Type","Agreement Id"
+"79194108310 (interzet)","********6538","Санкт-Петербург, Ш*****************, ******, 29, п.1","9644224","2","10557305"
+"79194108310 (sbor)","********6538","Санкт-Петербург, Ш*************************, ******, 29, п.1","9644224","2","10557305"
+"79876543210 (dzr)","********0493","Нижний Новгород, П**********************, **, 5, п.1","4453093","2","3291977"
 ```
 
 And can save console output to text file separately:
 ```sh
-osint_cli_tool_skeleton www.google.com reddit.com patreon.com -oT results.txt
+domru_customer_check 79194108310 79876543210 -oT results.txt
 ...
-$ head -n 4 results.txt
-Target: www.google.com
+$ head -n 7 results.txt
+Target: 79194108310 (interzet)
 Results found: 1
-1) Value: Google
-Code: 200
+1) Contact Id: 9644224
+Contact Type: 2
+Agreement Id: 10557305
+Row: ********6538
+Address: Санкт-Петербург, Ш*************************, ******, 29, п.1
 ```
 </details>
 
@@ -111,7 +131,7 @@ Code: 200
 
 The tool supports proxy:
 ```sh
-$ osint_cli_tool_skeleton www.google.com --proxy http://localhost:8080
+$ domru_customer_check www.google.com --proxy http://localhost:8080
 ```
 </details>
 
@@ -123,9 +143,9 @@ Make sure you have Python3 and pip installed.
 <details>
 <summary>Manually</summary>
 
-1. Clone or [download](https://github.com/soxoj/osint-cli-tool-skeleton/archive/refs/heads/main.zip) respository
+1. Clone or [download](https://github.com/soxoj/domru-customer-check/archive/refs/heads/main.zip) respository
 ```sh
-$ git clone https://github.com/soxoj/osint-cli-tool-skeleton
+$ git clone git@github.com:soxoj/domru-customer-check.git
 ```
 
 2. Install dependencies
@@ -140,10 +160,5 @@ $ pip3 install -r requirements.txt
 You can clone/download repo and install it from the directory to use as a Python package.
 ```sh
 $ pip3 install .
-```
-
-Also you can install it from the PyPI registry:
-```sh
-$ pip3 install https://github.com/soxoj/osint-cli-tool-skeleton
 ```
 </details>

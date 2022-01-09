@@ -34,6 +34,9 @@ class PlainOutput(Output):
         olist = self.data
 
         for o in olist:
+            if not o:
+                continue
+
             i = o.input_data
 
             text += f'Target: {self.colored(str(i), "green")}\n'
@@ -83,7 +86,15 @@ class CSVOutput(Output):
         if not len(self.data) and not len(self.data[0].results):
             return ''
 
-        fields = self.data[0].results[0].fields
+        fields = []
+        for f in self.data:
+            if not f:
+                continue
+            for r in f.results:
+                fields += r.fields
+
+        fields = list(set(fields))
+
         fieldnames = ['Target'] + [k.title().replace('_', ' ') for k in fields]
 
         with open(self.filename, 'w') as csvfile:
@@ -91,6 +102,9 @@ class CSVOutput(Output):
             writer.writeheader()
 
             for o in self.data:
+                if not o:
+                    continue
+
                 i = o.input_data
                 row = {'Target': i}
 
