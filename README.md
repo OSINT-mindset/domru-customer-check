@@ -6,7 +6,7 @@ Dom.ru is one of the largest Russian ISP owned by [ERTelecom](https://en.wikiped
 
 ## Usage
 
-**Only phones as targets are supported for now!**
+You can starts search by phone number, agreement ID, encoded agreement ID.
 
 ```sh
 # without installing
