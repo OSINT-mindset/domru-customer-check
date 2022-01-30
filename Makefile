@@ -1,5 +1,5 @@
 PROJECT_NAME=domru_customer_check
-LINT_FILES=domru_customer_check tests
+LINT_FILES=domru_customer_check
 
 test:
 	coverage run --source=./domru_customer_check -m pytest tests

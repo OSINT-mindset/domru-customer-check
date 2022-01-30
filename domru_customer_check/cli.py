@@ -11,6 +11,7 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from .core import *
 from .report import *
+from .server import *
 
 
 def setup_arguments_parser():
@@ -70,6 +71,14 @@ def setup_arguments_parser():
         dest="txt_filename",
         default='',
         help="Path to file for saving TXT report (grepable console output).",
+    )
+    out_group.add_argument(
+        "--json-report",
+        "-oJ",
+        action="store",
+        dest="json_filename",
+        default='',
+        help="Path to file for saving JSON report.",
     )
     parser.add_argument(
         "--version",
@@ -148,6 +157,14 @@ def setup_arguments_parser():
         default=False,
         help="Don't show progressbar.",
     )
+    parser.add_argument(
+        "--server",
+        metavar='SERVER_ADDR',
+        action="store",
+        dest="server",
+        default='',
+        help="Start a server on a specific IP:PORT. e.g. 0.0.0.0:8080",
+    )
 
     return parser
 
@@ -174,6 +191,14 @@ async def main():
         log_level = logging.WARNING
 
     logger.setLevel(log_level)
+
+    # server
+    if args.server:
+        await CheckServer(
+            proxy=args.proxy,
+            addr=args.server,
+            loop=asyncio.get_event_loop(),
+        ).start(debug=args.debug)
 
     input_data = []
     targets = []
@@ -202,6 +227,7 @@ async def main():
         proxy=args.proxy,
     )
 
+
     domains = await processor.get_domains()
     print(f'Collected {len(domains)} domains')
 
@@ -226,9 +252,13 @@ async def main():
         print(r.put())
 
     # save TXT report
-
     if args.txt_filename:
         r = TXTOutput(output_data, filename=args.txt_filename)
+        print(r.put())
+
+    # save JSON report
+    if args.json_filename:
+        r = JSONOutput(output_data, filename=args.json_filename)
         print(r.put())
 
     await processor.close()
@@ -236,7 +266,11 @@ async def main():
 
 def run():
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    try:
+        loop.run_until_complete(main())
+    except KeyboardInterrupt:
+        pass
+    loop.close()
 
 
 if __name__ == "__main__":
